@@ -1,0 +1,105 @@
+#include <iostream>
+
+using namespace std;
+
+//Task 1
+
+const int ROWS = 3;
+const int COLS = 3;
+
+char board[ROWS][COLS];
+
+void initializeBoard() {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            board[i][j] = '-';
+        }
+    }
+}
+
+void printBoard() {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+bool isBoardFull() {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            if (board[i][j] == '-') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool checkWin(char player) {
+    for (int i = 0; i < ROWS; i++) {
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+            return true;
+        }
+    }
+
+    for (int j = 0; j < COLS; j++) {
+        if (board[0][j] == player && board[1][j] == player && board[2][j] == player) {
+            return true;
+        }
+    }
+
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+        return true;
+    }
+    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+        return true;
+    }
+
+    return false;
+}
+
+void playGame() {
+    char currentPlayer = 'X';
+    int row, col;
+
+    while (true) {
+        cout << "player " << currentPlayer << ", enter the row and column (from 1 to 3): ";
+        cin >> row >> col;
+
+        row--;
+        col--;
+
+        if (row < 0 || row >= ROWS || col < 0 || col >= COLS) {
+            cout << "wrong coordinates. please try again." << endl;
+            continue;
+        }
+
+        if (board[row][col] != '-') {
+            cout << "this cell is already occupied. please try again." << endl;
+            continue;
+        }
+
+        board[row][col] = currentPlayer;
+        printBoard();
+
+        if (checkWin(currentPlayer)) {
+            cout << "player " << currentPlayer << " wins!" << endl;
+            break;
+        }
+
+        if (isBoardFull()) {
+            cout << "the game ends in a draw!" << endl;
+            break;
+        }
+
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+}
+
+int main() {
+    initializeBoard();
+    playGame();
+ 
+}
